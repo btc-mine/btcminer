@@ -15,9 +15,9 @@
     />
 
     <!-- Website Icon (Favicon) -->
-<link rel="icon" type="image/jpeg" href="b.jpg" />
-<link rel="apple-touch-icon" href="b.jpg" />
-    
+    <link rel="icon" type="image/jpeg" href="b.jpg" />
+    <link rel="apple-touch-icon" href="b.jpg" />
+
     <link
       rel="manifest"
       href="data:application/json;base64,ewogICJuYW1lIjogIkJUQyBDbG91ZCBNaW5pbmciLAogICJzaG9ydF9uYW1lIjogIkJUQyBNaW5pbmciLAogICJzdGFydF91cmwiOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBiMGUxYSIsCiAgInRoZW1lX2NvbG9yIjogIiNmNzkzMWEiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnJTIweG1sbnMlM0QlMjJodHRwJTNBJTJGJTJGd3d3LnczLm9yZyUyRjIwMDAlMkZzdmclMjIlMjB2aWV3Qm94JTNEJTIyMCUyMDAlMjA1MTIlMjA1MTIlMjIlM0UlM0NyZWN0JTIwd2lkdGglM0QlMjI1MTIlMjIlMjBoZWlnaHQlM0QlMjI1MTIlMjIlMjByeCUzRCUyMjUwJTIyJTIwZmlsbCUzRCUyMiUyMzBmMTMxZSUyMiUyRiUzRSUzQ3RleHQlMjB4JTNEJTIyMjU2JTIyJTIweSUzRCUyMjI3MCUyMiUyMGZvbnQtc2l6ZSUzRCUyMjI4MCUyMiUyMGZvbnQtZmFtaWx5JTNEJTIyQXJpYWwlMkMlMjBIZWx2ZXRpY2ElMkMlMjBzYW5zLXNlcmlmJTIyJTIwZmlsbCUzRCUyMiUyM2Y3OTMxYSUyMiUyMHRleHQtYW5jaG9yJTNEJTIybWlkZGxlJTIyJTIwZG9taW5hbnQtYmFzZWxpbmUlM0QlMjJjZW50cmFsJTIyJTNFJUMyJUIyJUMyJUIyJTNDJTJGdGV4dCUzRSUzQyUyRnN2ZyUzRQoiLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFzayBhbnlsYW5nIgogICAgfQogIF0KfQ=="
@@ -1067,7 +1067,7 @@
             </div>
           </div>
 
-          <!-- PWA Install Instructions (shown if browser doesn't support native install) -->
+          <!-- PWA Install Instructions -->
           <div class="pwa-instruction" id="pwaInstruction">
             <div style="color: #f7931a; font-weight: 600; margin-bottom: 6px">
               <i class="fas fa-mobile-alt"></i> Add to Home Screen
@@ -1153,7 +1153,7 @@
             </div>
           </div>
 
-          <!-- Admin Quick Access (visible only to admin) -->
+          <!-- Admin Quick Access -->
           <div id="adminQuick" style="display: none; margin-top: 12px">
             <button class="btn btn-primary" onclick="navigateTo('admin')">
               <i class="fas fa-crown"></i> Admin Panel
@@ -1161,7 +1161,7 @@
           </div>
         </div>
 
-        <!-- ===== PAGE: PROJECT (UPDATED) ===== -->
+        <!-- ===== PAGE: PROJECT ===== -->
         <div class="page" id="page-project">
           <div class="page-header">
             <span class="logo-text"
@@ -1647,7 +1647,7 @@
           </div>
         </div>
 
-        <!-- ===== PAGE: RECHARGE (with Amount & TXID) ===== -->
+        <!-- ===== PAGE: RECHARGE ===== -->
         <div class="page" id="page-recharge">
           <div class="page-header">
             <span class="logo-text"
@@ -2339,7 +2339,7 @@
       const db = firebase.firestore();
 
       // Admin email (hardcoded)
-      const ADMIN_EMAIL = "Alex@gmail.com";
+      const ADMIN_EMAIL = "ahmad.niazi14@gmail.com";
 
       // BEP20 and TRC20 addresses
       const BEP20_ADDRESS = "0x95c535EA4F83eE5ECa94fC689048d0BE56C4c60d";
@@ -2353,12 +2353,10 @@
       window.addEventListener("beforeinstallprompt", (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        // Show the app install button
         const installBtn = document.getElementById("installAppBtn");
         if (installBtn) {
           installBtn.style.display = "flex";
         }
-        // Hide the instruction message
         document.getElementById("pwaInstruction").classList.remove("show");
       });
 
@@ -2381,7 +2379,6 @@
             closeAppInstall();
           });
         } else {
-          // Fallback: show instructions
           document.getElementById("pwaInstruction").classList.toggle("show");
           closeAppInstall();
         }
@@ -2389,10 +2386,8 @@
 
       function triggerInstall() {
         if (deferredPrompt) {
-          // Show the app install popup
           document.getElementById("appInstallPopup").classList.add("show");
         } else {
-          // Toggle the instruction message
           const inst = document.getElementById("pwaInstruction");
           inst.classList.toggle("show");
           if (inst.classList.contains("show")) {
@@ -2537,23 +2532,32 @@
                   .get();
                 if (!refDoc.empty) {
                   referrerId = refDoc.docs[0].id;
+                } else {
+                  showMessage(
+                    "⚠️ The invitation code is invalid. Please check and try again.",
+                    "error",
+                  );
                 }
               }
               await db
                 .collection("users")
                 .doc(cred.user.uid)
-                .set({
-                  email: email,
-                  balance: 0,
-                  inviteCode: inviteCode,
-                  referrer: referrerId,
-                  hasMiner: false,
-                  createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                  totalDeposits: 0,
-                  totalWithdrawals: 0,
-                  lastDailyProfit: null,
-                  isAdmin: email === ADMIN_EMAIL,
-                });
+                .set(
+                  {
+                    email: email,
+                    balance: 0,
+                    inviteCode: inviteCode,
+                    referrer: referrerId,
+                    hasMiner: false,
+                    createdAt:
+                      firebase.firestore.FieldValue.serverTimestamp(),
+                    totalDeposits: 0,
+                    totalWithdrawals: 0,
+                    lastDailyProfit: null,
+                    isAdmin: email === ADMIN_EMAIL,
+                  },
+                  { merge: true },
+                );
               if (referrerId) {
                 await db
                   .collection("users")
@@ -2624,9 +2628,7 @@
           navigateTo("home");
           await loadAvailablePackages();
           await resumeMining();
-          // Check if user already has miner and update button
           updateMiningButtonState();
-          // Check if buy button should be hidden
           if (currentUserData && currentUserData.hasMiner) {
             document.getElementById("buyNowBtn").style.display = "none";
             document.getElementById("buySuccessMsg").style.display = "block";
@@ -2655,6 +2657,8 @@
 
       // ================================================================
       // LOAD USER DATA
+      // ✅ FIXED: Removed `referrer: null` and added `{ merge: true }`
+      //    This prevents overwriting the referrer set during signup.
       // ================================================================
       async function loadUserData(uid) {
         try {
@@ -2667,18 +2671,21 @@
             await db
               .collection("users")
               .doc(uid)
-              .set({
-                email: currentUser.email,
-                balance: 0,
-                inviteCode: inviteCode,
-                referrer: null,
-                hasMiner: false,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                totalDeposits: 0,
-                totalWithdrawals: 0,
-                lastDailyProfit: null,
-                isAdmin: currentUser.email === ADMIN_EMAIL,
-              });
+              .set(
+                {
+                  email: currentUser.email,
+                  balance: 0,
+                  inviteCode: inviteCode,
+                  hasMiner: false,
+                  createdAt:
+                    firebase.firestore.FieldValue.serverTimestamp(),
+                  totalDeposits: 0,
+                  totalWithdrawals: 0,
+                  lastDailyProfit: null,
+                  isAdmin: currentUser.email === ADMIN_EMAIL,
+                },
+                { merge: true },
+              );
             const doc2 = await db.collection("users").doc(uid).get();
             currentUserData = doc2.data();
             currentUserData.id = uid;
@@ -3014,7 +3021,6 @@
         updateMiningButtonState();
         loadAccountData();
 
-        // Update buy button visibility based on hasMiner
         if (currentUserData && currentUserData.hasMiner) {
           document.getElementById("buyNowBtn").style.display = "none";
           document.getElementById("buySuccessMsg").style.display = "block";
@@ -3268,7 +3274,7 @@
       }
 
       // ================================================================
-      // SUBMIT DEPOSIT (with "under review" and disable button)
+      // SUBMIT DEPOSIT
       // ================================================================
       function submitDeposit() {
         const amount = parseFloat(
@@ -3285,7 +3291,6 @@
           return;
         }
 
-        // Disable button and show status
         const btn = document.getElementById("submitDepositBtn");
         btn.disabled = true;
         document.getElementById("depositStatusMsg").style.display = "block";
@@ -3400,7 +3405,7 @@
       }
 
       // ================================================================
-      // CHANGE PASSWORD (with hide confirm button and success message)
+      // CHANGE PASSWORD
       // ================================================================
       async function changePassword() {
         const old = document.getElementById("oldPassword").value;
@@ -3608,7 +3613,7 @@
       }
 
       // ================================================================
-      // BUY NOW – with balance check, success message, hide button, set hasMiner
+      // BUY NOW
       // ================================================================
       function showBuyNow() {
         document.getElementById("buyModal").classList.add("show");
@@ -3623,7 +3628,6 @@
           return;
         }
 
-        // Check balance
         if ((currentUserData.balance || 0) < amount) {
           showMessage("Insufficient balance. Please recharge first.", "error");
           return;
@@ -3647,7 +3651,7 @@
           const newBalance = currentUserData.balance - amount;
           await db.collection("users").doc(currentUser.uid).update({
             balance: newBalance,
-            hasMiner: true, // 👈 Unlock mining
+            hasMiner: true,
           });
 
           await systemRef.update({
@@ -3677,7 +3681,6 @@
               el.textContent = newAvailable.toLocaleString();
             });
 
-          // Hide Buy Now button and show success
           document.getElementById("buyNowBtn").style.display = "none";
           document.getElementById("buySuccessMsg").style.display = "block";
 
@@ -3686,7 +3689,6 @@
             "success",
           );
 
-          // Enable mining button
           updateMiningButtonState();
         } catch (error) {
           showMessage("Error: " + error.message, "error");
@@ -3840,7 +3842,7 @@
       }
 
       // ================================================================
-      // ADMIN DEPOSITS – with FIXED approve (adds balance)
+      // ADMIN DEPOSITS
       // ================================================================
       async function loadAdminDeposits() {
         const container = document.getElementById("depositsList");
@@ -3901,7 +3903,6 @@
         }
       }
 
-      // FIXED: approveDeposit – properly adds balance to user
       async function approveDeposit(id) {
         try {
           const doc = await db.collection("deposits").doc(id).get();
@@ -3911,12 +3912,10 @@
             return;
           }
 
-          // Update deposit status
           await db.collection("deposits").doc(id).update({
             status: "approved",
           });
 
-          // Get user reference
           const userRef = db.collection("users").doc(data.userId);
           const userDoc = await userRef.get();
 
@@ -3929,7 +3928,6 @@
                 data.amount,
               ),
             });
-            // Add transaction record
             await userRef.collection("transactions").add({
               type: "deposit",
               amount: data.amount,
@@ -4225,17 +4223,15 @@
       }
 
       // ================================================================
-      // INIT: Check URL for invite code
+      // INIT: Check URL for invite code (AUTO-FILL IMMEDIATELY)
       // ================================================================
       (function () {
         const params = new URLSearchParams(window.location.search);
         const ref = params.get("ref");
         if (ref) {
           document.getElementById("inviteCode").value = ref;
-          setTimeout(() => {
-            showMessage("Invitation code auto-filled!", "success");
-            setTimeout(clearMessage, 2000);
-          }, 500);
+          showMessage("✅ Invitation code auto-filled!", "success");
+          setTimeout(clearMessage, 3000);
         }
       })();
 
